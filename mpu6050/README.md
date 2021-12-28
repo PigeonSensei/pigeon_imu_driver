@@ -23,7 +23,7 @@ roslaunch mpu6050 mpu6050.launch
 
 ### Published Topics
 
-- **imu** ([sensor_msgs/Imu](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Imu.html))
+- **imu/data** ([sensor_msgs/Imu](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Imu.html))
 
 - **imu/rpy** ([imu_msgs/RPY](https://github.com/PigeonSensei/pigeon_imu_driver/blob/master/imu_msgs/msg/RPY.msg))
 
@@ -59,18 +59,24 @@ roslaunch mpu6050 mpu6050.launch
 
   Sets the beta gain of the Madgwick filter
   
-- ~ **AccelerationScale** (int, default: 3)
+- ~ **AccelerationScale** (int, default: 0)
 
   Acceleration sensor scale setting
+
+  A larger scale increases the detection range but decreases the accuracy.
+
   - **0** : ±2g
   - **1** : ±4g
   - **2** : ±8g
   - **3** : ±16g
   - **others** : defult acceleration scale
   
-- ~ **GyroScale** (int, default: 3)
+- ~ **GyroScale** (int, default: 0)
 
   Gyro sensor scale setting
+
+  A larger scale increases the detection range but decreases the accuracy.
+
   - **0** : ±250º/s
   - **1** : ±500º/s
   - **2** : ±1000º/s

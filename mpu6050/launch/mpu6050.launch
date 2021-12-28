@@ -9,8 +9,8 @@
   <param name="CalibrationTimes" type="int" value="2000" />
   <param name="UseFilter" type="bool" value="true" />
   <param name="FilterGain" type="double" value="0.0001" />
-  <param name="AccelerationScale" type="int" value="3" />
-  <param name="GyroScale" type="int" value="3" />
+  <param name="AccelerationScale" type="int" value="0" />
+  <param name="GyroScale" type="int" value="0" />
   <param name="Hz" type="int" value="60" />
   <param name="ParentsframeID" type="string" value="base_link" />
   <param name="FrameID" type="string" value="imu_link" />

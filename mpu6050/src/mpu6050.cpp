@@ -84,9 +84,9 @@ void Mpu6050::InitCalibration(int value)
 
 void Mpu6050::Calibration()
 {
-  acceleration_[0] = acceleration_[0];
-  acceleration_[1] = acceleration_[1];
-  acceleration_[2] = acceleration_[2];
+  acceleration_[0] = acceleration_[0] - average_acceleration_[0];
+  acceleration_[1] = acceleration_[1] - average_acceleration_[1];
+  acceleration_[2] = acceleration_[2] - average_acceleration_[2];
 
   gyro_[0] = gyro_[0] - average_gyro_[0];
   gyro_[1] = gyro_[1] - average_gyro_[1];
@@ -112,11 +112,11 @@ void Mpu6050::GetROSParam()
   n.param<double>("FilterGain", beta_, 0.0001);
   if(beta_ <= 0.0) beta_ = 0.0001;
 
-  n.param<int>("AccelerationScale", acceleration_scale_, 3);
-  if(acceleration_scale_ < 0 | acceleration_scale_ > 3) acceleration_scale_ = 3;
+  n.param<int>("AccelerationScale", acceleration_scale_, 0);
+  if(acceleration_scale_ < 0 | acceleration_scale_ > 3) acceleration_scale_ = 0;
 
-  n.param<int>("GyroScale", gyro_scale_, 3);
-  if(gyro_scale_ < 0 | gyro_scale_ > 3) gyro_scale_ = 3;
+  n.param<int>("GyroScale", gyro_scale_, 0);
+  if(gyro_scale_ < 0 | gyro_scale_ > 3) gyro_scale_ = 0;
 
   n.param<std::string>("FrameID", frame_id_, "imu_link");
   n.param<std::string>("ParentsFrameID", parents_frame_id_, "base_link");
@@ -164,9 +164,9 @@ short Mpu6050::ReadRawData(int addr)
 
 void Mpu6050::GetImuData()
 {
-  acceleration_[0] = -1 * (ReadRawData(ACCEL_XOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
-  acceleration_[1] = -1 * (ReadRawData(ACCEL_YOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
-  acceleration_[2] = -1 * (ReadRawData(ACCEL_ZOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
+  acceleration_[0] = (ReadRawData(ACCEL_XOUT_H) / (16384.0 / pow(2, acceleration_scale_)));
+  acceleration_[1] = (ReadRawData(ACCEL_YOUT_H) / (16384.0 / pow(2, acceleration_scale_)));
+  acceleration_[2] = (ReadRawData(ACCEL_ZOUT_H) / (16384.0 / pow(2, acceleration_scale_)));
   gyro_[0] = ReadRawData(GYRO_XOUT_H) / (131.072 / pow(2, gyro_scale_));
   gyro_[1] = ReadRawData(GYRO_YOUT_H) / (131.072 / pow(2, gyro_scale_));
   gyro_[2] = ReadRawData(GYRO_ZOUT_H) / (131.072 / pow(2, gyro_scale_));
@@ -256,9 +256,9 @@ void Mpu6050::UpdateImuData()
   imu_.orientation.y = q2_;
   imu_.orientation.z = q3_;
   imu_.orientation.w = q0_;
-  imu_.linear_acceleration.x = acceleration_[0];
-  imu_.linear_acceleration.y = acceleration_[1];
-  imu_.linear_acceleration.z = acceleration_[2];
+  imu_.linear_acceleration.x = -1 * acceleration_[0] * 9.80665;
+  imu_.linear_acceleration.y = -1 * acceleration_[1] * 9.80665;
+  imu_.linear_acceleration.z = acceleration_[2] * 9.80665;
   imu_.angular_velocity.x = gyro_[0];
   imu_.angular_velocity.y = gyro_[1];
   imu_.angular_velocity.z = gyro_[2];

@@ -106,7 +106,7 @@ class Mpu6050
 {
 public:
     Mpu6050(ros::NodeHandle &n)
-        : publisher_imu_(n.advertise<sensor_msgs::Imu>("imu",1000)),
+        : publisher_imu_(n.advertise<sensor_msgs::Imu>("imu/data",1000)),
           publisher_rpy_(n.advertise<imu_msgs::RPY>("imu/rpy",1000)),
           service_server_reset_imu_(n.advertiseService("reset_imu", &Mpu6050::ResetIMUServiceCallback, this))
        {
