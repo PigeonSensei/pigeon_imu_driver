@@ -39,6 +39,9 @@ void Mpu6050::InitVariable()
 
     average_acceleration_[i] = 0.0;
     average_gyro_[i] = 0.0;
+
+    calibration_acceleration_[i] = 0.0;
+    calibration_gyro_[i] = 0.0;
   }
 }
 
@@ -84,17 +87,21 @@ void Mpu6050::InitCalibration(int value)
 
 void Mpu6050::Calibration()
 {
-  acceleration_[0] = acceleration_[0] - average_acceleration_[0];
-  acceleration_[1] = acceleration_[1] - average_acceleration_[1];
-  acceleration_[2] = acceleration_[2] - average_acceleration_[2];
+//  acceleration_[0] = acceleration_[0] - average_acceleration_[0];
+//  acceleration_[1] = acceleration_[1] - average_acceleration_[1];
+//  acceleration_[2] = acceleration_[2] - average_acceleration_[2];
 
-  gyro_[0] = gyro_[0] - average_gyro_[0];
-  gyro_[1] = gyro_[1] - average_gyro_[1];
-  gyro_[2] = gyro_[2] - average_gyro_[2];
+//  gyro_[0] = gyro_[0] - average_gyro_[0];
+//  gyro_[1] = gyro_[1] - average_gyro_[1];
+//  gyro_[2] = gyro_[2] - average_gyro_[2];
 
-  gyro_[0] = DegreeToRadian(gyro_[0]);
-  gyro_[1] = DegreeToRadian(gyro_[1]);
-  gyro_[2] = DegreeToRadian(gyro_[2]);
+  calibration_acceleration_[0] = acceleration_[0] - average_acceleration_[0];
+  calibration_acceleration_[1] = acceleration_[1] - average_acceleration_[1];
+  calibration_acceleration_[2] = acceleration_[2] - average_acceleration_[2];
+
+  calibration_gyro_[0] = DegreeToRadian(gyro_[0] - average_gyro_[0]);
+  calibration_gyro_[1] = DegreeToRadian(gyro_[1] - average_gyro_[1]);
+  calibration_gyro_[2] = DegreeToRadian(gyro_[2] - average_gyro_[2]);
 }
 
 void Mpu6050::GetROSParam()
@@ -259,9 +266,9 @@ void Mpu6050::UpdateImuData()
   imu_.linear_acceleration.x = -1 * acceleration_[0] * 9.80665;
   imu_.linear_acceleration.y = -1 * acceleration_[1] * 9.80665;
   imu_.linear_acceleration.z = acceleration_[2] * 9.80665;
-  imu_.angular_velocity.x = gyro_[0];
-  imu_.angular_velocity.y = gyro_[1];
-  imu_.angular_velocity.z = gyro_[2];
+  imu_.angular_velocity.x = calibration_gyro_[0];
+  imu_.angular_velocity.y = calibration_gyro_[1];
+  imu_.angular_velocity.z = calibration_gyro_[2];
 }
 
 void Mpu6050::UpdateTF()
@@ -313,7 +320,7 @@ void Mpu6050::Spin()
   CalculationDeltaTime();
   GetImuData();
   Calibration();
-  CalculationQuaternion(gyro_[0],gyro_[1],gyro_[2],acceleration_[0],acceleration_[1],acceleration_[2]);
+  CalculationQuaternion(calibration_gyro_[0],calibration_gyro_[1],calibration_gyro_[2],calibration_acceleration_[0],calibration_acceleration_[1],calibration_acceleration_[2]);
   Update();
   Publisher();
   time_last_ = time_now_;

@@ -184,6 +184,9 @@ private:
     double average_acceleration_[3];
     double average_gyro_[3];
 
+    double calibration_acceleration_[3];
+    double calibration_gyro_[3];
+
     ros::Time time_now_;
     ros::Time time_last_;
     tf::Quaternion orientation_;
