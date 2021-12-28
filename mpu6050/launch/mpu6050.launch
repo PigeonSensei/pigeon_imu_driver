@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- rusrun mpu6050 mpu6050_node -->
+  <node pkg="mpu6050" type="mpu6050_node" name="mpu6050_node" respawn="true" output="screen">
+  <param name="AD0" type="bool" value="false" />
+  <param name="PublishTF" type="bool" value="true" />
+  <param name="UseCalibration" type="bool" value="true" />
+  <param name="CalibrationTimes" type="int" value="2000" />
+  <param name="UseFileter" type="bool" value="true" />
+  <param name="FileterGain" type="double" value="0.0001" />
+  <param name="AccelerationScale" type="int" value="3" />
+  <param name="GyroScale" type="int" value="3" />
+  <param name="Hz" type="int" value="60" />
+  <param name="parents_frame_id" type="string" value="base_link" />
+  <param name="frame_id" type="string" value="imu_link" />
+</node>
+
+</launch>
