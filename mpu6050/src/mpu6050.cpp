@@ -107,10 +107,10 @@ void Mpu6050::GetROSParam()
   n.param<int>("CalibrationTimes", calibration_times_, 2000);
   if(calibration_times_ <= 0) calibration_times_ = 0;
 
-  n.param<bool>("UseFileter", use_fileter_, true);
+  n.param<bool>("UseFilter", use_filter_, true);
 
-  n.param<double>("FileterGain", beta_, 0.0001);
-  if(beta_ <= 0.0) beta_ = 0.0;
+  n.param<double>("FilterGain", beta_, 0.0001);
+  if(beta_ <= 0.0) beta_ = 0.0001;
 
   n.param<int>("AccelerationScale", acceleration_scale_, 3);
   if(acceleration_scale_ < 0 | acceleration_scale_ > 3) acceleration_scale_ = 3;
@@ -118,8 +118,8 @@ void Mpu6050::GetROSParam()
   n.param<int>("GyroScale", gyro_scale_, 3);
   if(gyro_scale_ < 0 | gyro_scale_ > 3) gyro_scale_ = 3;
 
-  n.param<std::string>("frame_id", frame_id_, "imu_link");
-  n.param<std::string>("parents_frame_id", parents_frame_id_, "base_link");
+  n.param<std::string>("FrameID", frame_id_, "imu_link");
+  n.param<std::string>("ParentsFrameID", parents_frame_id_, "base_link");
 
   ROS_INFO("AccelerationScale : %d", acceleration_scale_);
   ROS_INFO("GyroScale : %d", gyro_scale_);
@@ -185,7 +185,7 @@ void Mpu6050::CalculationQuaternion(double gx, double gy, double gz, double ax, 
   qDot3 = 0.5 * (q0_ * gy - q1_ * gz + q3_ * gx);
   qDot4 = 0.5 * (q0_ * gz + q1_ * gy - q2_ * gx);
 
-  if(use_fileter_ == true)
+  if(use_filter_ == true)
   {
     // Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
     if(!((ax == 0.0) && (ay == 0.0) && (az == 0.0))) {

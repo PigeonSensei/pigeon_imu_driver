@@ -168,7 +168,7 @@ private:
     bool use_tf_ = true;
     bool use_calibration_ = true;
     int calibration_times_ = 2000;
-    bool use_fileter_ = true;
+    bool use_filter_ = true;
     double beta_ = 0.0001;
     int acceleration_scale_ = 0;
     int gyro_scale_ = 0;
