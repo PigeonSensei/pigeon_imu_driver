@@ -1,4 +1,4 @@
-# l298n
+# mpu6050
 
 MPU6050 IMU Driver Ros Package
 
@@ -55,7 +55,7 @@ roslaunch mpu6050 mpu6050.launch
 
   Enable Filter, The filter used is Madgwick filter
 
-- ~ **FilterGain** (double, default: 0.0001)
+- ~ **FilterGain** (double, default: 0.031)
 
   Sets the beta gain of the Madgwick filter
   

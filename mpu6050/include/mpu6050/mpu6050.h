@@ -169,7 +169,7 @@ private:
     bool use_calibration_ = true;
     int calibration_times_ = 2000;
     bool use_filter_ = true;
-    double beta_ = 0.0001;
+    double beta_ = 0.031;
     int acceleration_scale_ = 0;
     int gyro_scale_ = 0;
     std::string frame_id_;

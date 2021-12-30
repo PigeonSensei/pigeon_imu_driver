@@ -47,7 +47,6 @@ void Mpu6050::InitVariable()
 
 void Mpu6050::Reset()
 {
-
   ROS_INFO("Reset MPU6050");
   InitVariable();
   q0_ = 1.0; q1_ = 0.0; q2_ = 0.0; q3_ = 0.0;
@@ -66,7 +65,7 @@ void Mpu6050::InitCalibration(int value)
     GetImuData();
     average_acceleration_[0] += acceleration_[0];
     average_acceleration_[1] += acceleration_[1];
-    average_acceleration_[2] += acceleration_[2] + 9.80665;
+    average_acceleration_[2] += acceleration_[2] - 9.80665;
     average_gyro_[0] += gyro_[0];
     average_gyro_[1] += gyro_[1];
     average_gyro_[2] += gyro_[2];
@@ -87,14 +86,6 @@ void Mpu6050::InitCalibration(int value)
 
 void Mpu6050::Calibration()
 {
-//  acceleration_[0] = acceleration_[0] - average_acceleration_[0];
-//  acceleration_[1] = acceleration_[1] - average_acceleration_[1];
-//  acceleration_[2] = acceleration_[2] - average_acceleration_[2];
-
-//  gyro_[0] = gyro_[0] - average_gyro_[0];
-//  gyro_[1] = gyro_[1] - average_gyro_[1];
-//  gyro_[2] = gyro_[2] - average_gyro_[2];
-
   calibration_acceleration_[0] = acceleration_[0] - average_acceleration_[0];
   calibration_acceleration_[1] = acceleration_[1] - average_acceleration_[1];
   calibration_acceleration_[2] = acceleration_[2] - average_acceleration_[2];
@@ -171,9 +162,9 @@ short Mpu6050::ReadRawData(int addr)
 
 void Mpu6050::GetImuData()
 {
-  acceleration_[0] = -1 * (ReadRawData(ACCEL_XOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
-  acceleration_[1] = -1 * (ReadRawData(ACCEL_YOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
-  acceleration_[2] = -1 * (ReadRawData(ACCEL_ZOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
+  acceleration_[0] = (ReadRawData(ACCEL_XOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
+  acceleration_[1] = (ReadRawData(ACCEL_YOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
+  acceleration_[2] = (ReadRawData(ACCEL_ZOUT_H) / (16384.0 / pow(2, acceleration_scale_))) * 9.80665;
   gyro_[0] = ReadRawData(GYRO_XOUT_H) / (131.072 / pow(2, gyro_scale_));
   gyro_[1] = ReadRawData(GYRO_YOUT_H) / (131.072 / pow(2, gyro_scale_));
   gyro_[2] = ReadRawData(GYRO_ZOUT_H) / (131.072 / pow(2, gyro_scale_));
@@ -195,7 +186,8 @@ void Mpu6050::CalculationQuaternion(double gx, double gy, double gz, double ax, 
   if(use_filter_ == true)
   {
     // Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
-    if(!((ax == 0.0) && (ay == 0.0) && (az == 0.0))) {
+    if(!((ax == 0.0) && (ay == 0.0) && (az == 0.0)))
+    {
 
       // Normalise accelerometer measurement
       recipNorm = sqrt(ax * ax + ay * ay + az * az);
@@ -263,9 +255,9 @@ void Mpu6050::UpdateImuData()
   imu_.orientation.y = q2_;
   imu_.orientation.z = q3_;
   imu_.orientation.w = q0_;
-  imu_.linear_acceleration.x = acceleration_[0];
-  imu_.linear_acceleration.y = acceleration_[1];
-  imu_.linear_acceleration.z = -1 * acceleration_[2];
+  imu_.linear_acceleration.x = calibration_acceleration_[0];
+  imu_.linear_acceleration.y = calibration_acceleration_[1];
+  imu_.linear_acceleration.z = calibration_acceleration_[2];
   imu_.angular_velocity.x = calibration_gyro_[0];
   imu_.angular_velocity.y = calibration_gyro_[1];
   imu_.angular_velocity.z = calibration_gyro_[2];
@@ -330,7 +322,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "mpu6050_node");
     ros::NodeHandle n;
-    ros::NodeHandle pn;
+    ros::NodeHandle pn("~");
 
     int hz = 60;
 

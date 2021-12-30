@@ -8,7 +8,7 @@
   <param name="UseCalibration" type="bool" value="true" />
   <param name="CalibrationTimes" type="int" value="2000" />
   <param name="UseFilter" type="bool" value="true" />
-  <param name="FilterGain" type="double" value="0.0001" />
+  <param name="FilterGain" type="double" value="0.031" />
   <param name="AccelerationScale" type="int" value="0" />
   <param name="GyroScale" type="int" value="0" />
   <param name="Hz" type="int" value="60" />
