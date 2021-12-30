@@ -6,6 +6,8 @@ This Package is for RaspberryPi
 
 ### Yotube Video
 
+https://youtu.be/WxuLJZSJ7sk
+
 ### Diagram
 
 ![mpu6050](./diagram/mpu6050.png)
