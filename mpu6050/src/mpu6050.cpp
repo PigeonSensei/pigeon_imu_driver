@@ -107,8 +107,8 @@ void Mpu6050::GetROSParam()
 
   n.param<bool>("UseFilter", use_filter_, true);
 
-  n.param<double>("FilterGain", beta_, 0.0001);
-  if(beta_ <= 0.0) beta_ = 0.0001;
+  n.param<double>("FilterGain", beta_, 0.031);
+  if(beta_ <= 0.0) beta_ = 0.031;
 
   n.param<int>("AccelerationScale", acceleration_scale_, 0);
   if(acceleration_scale_ < 0 | acceleration_scale_ > 3) acceleration_scale_ = 0;
