@@ -8,12 +8,16 @@ This Package is for RaspberryPi
 
 ### Diagram
 
+![mpu6050](./diagram/mpu6050.png)
+
 ### Dependency package
 - [wiringPi](http://wiringpi.com/download-and-install/)
 
 - [imu_msgs](https://github.com/PigeonSensei/pigeon_imu_driver/tree/master/imu_msgs)
 
 ### Run
+
+**I2C communication must be enabled before execution**
 
 ```bash
 roslaunch mpu6050 mpu6050.launch
@@ -25,7 +29,7 @@ roslaunch mpu6050 mpu6050.launch
 
 - **imu/data** ([sensor_msgs/Imu](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Imu.html))
 
-- **imu/rpy** ([imu_msgs/RPY](https://github.com/PigeonSensei/pigeon_imu_driver/blob/master/imu_msgs/msg/RPY.msg))
+- **imu/angle** ([imu_msgs/Angle](https://github.com/PigeonSensei/pigeon_imu_driver/blob/master/imu_msgs/msg/Angle.msg))
 
 ### Services
 - **reset_imu** ([mpu6050/ResetIMU](https://github.com/PigeonSensei/pigeon_imu_driver/blob/master/mpu6050/srv/ResetIMU.srv))
@@ -94,3 +98,8 @@ roslaunch mpu6050 mpu6050.launch
 - ~ **FrameID** (string, default: imu_link)
 
   Set frame's ID
+  
+### Reference
+
+- [Estimation of IMU and MARG orientation using a gradient descent algorithm.   Sebastian O.H. Madgwick](https://www.researchgate.net/publication/221775760_Estimation_of_IMU_and_MARG_orientation_using_a_gradient_descent_algorithm)
+
