@@ -280,29 +280,29 @@ void Mpu6050::UpdateTF()
 
 }
 
-void Mpu6050::UpdateRPY()
+void Mpu6050::UpdateAngle()
 {
   tf::Matrix3x3 m(orientation_);
   double roll,pitch,yaw;
   m.getRPY(roll,pitch,yaw);
 
-  rpy_.TimeStamp = time_now_;
-  rpy_.roll = RadianToDegree(roll);
-  rpy_.pitch = RadianToDegree(pitch);
-  rpy_.yaw = RadianToDegree(yaw);
+  angle_.TimeStamp = time_now_;
+  angle_.roll = RadianToDegree(roll);
+  angle_.pitch = RadianToDegree(pitch);
+  angle_.yaw = RadianToDegree(yaw);
 }
 
 void Mpu6050::Update()
 {
   UpdateImuData();
   UpdateTF();
-  UpdateRPY();
+  UpdateAngle();
 }
 
 void Mpu6050::Publisher()
 {
   publisher_imu_.publish(imu_);
-  publisher_rpy_.publish(rpy_);
+  publisher_rpy_.publish(angle_);
 }
 
 void Mpu6050::Spin()

@@ -5,7 +5,7 @@
 #include <tf/transform_datatypes.h>
 #include <tf/transform_broadcaster.h>
 
-#include "imu_msgs/RPY.h"
+#include "imu_msgs/Angle.h"
 #include "mpu6050/ResetIMU.h"
 
 #include <sensor_msgs/Imu.h>
@@ -107,7 +107,7 @@ class Mpu6050
 public:
     Mpu6050(ros::NodeHandle &n)
         : publisher_imu_(n.advertise<sensor_msgs::Imu>("imu/data",1000)),
-          publisher_rpy_(n.advertise<imu_msgs::RPY>("imu/rpy",1000)),
+          publisher_rpy_(n.advertise<imu_msgs::Angle>("imu/angle",1000)),
           service_server_reset_imu_(n.advertiseService("reset_imu", &Mpu6050::ResetIMUServiceCallback, this))
        {
           GetROSParam();
@@ -153,7 +153,7 @@ public:
 
     void UpdateTF();
 
-    void UpdateRPY();
+    void UpdateAngle();
 
     void Update();
 
@@ -199,7 +199,7 @@ private:
     bool reset_swith_ = false;
 
     sensor_msgs::Imu imu_;
-    imu_msgs::RPY rpy_;
+    imu_msgs::Angle angle_;
 
     double q0_ = 1.0, q1_ = 0.0, q2_ = 0.0, q3_ = 0.0;	// quaternion [w x y z]
 
